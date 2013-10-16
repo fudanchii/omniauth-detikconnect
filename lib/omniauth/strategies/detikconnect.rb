@@ -29,7 +29,7 @@ module OmniAuth
       option :token_params, {}
       option :token_options, []
       option :auth_token_params, {}
-      option :provider_ignores_state, false
+      option :provider_ignores_state, true
 
       attr_accessor :access_token
 
@@ -42,15 +42,15 @@ module OmniAuth
       end
 
       credentials do
-        hash = {'token' => access_token.token}
+        hash = {'accessToken' => access_token.token}
         hash.merge!('refresh_token' => access_token.refresh_token) if access_token.expires? && access_token.refresh_token
-        hash.merge!('expires_at' => access_token.expires_at) if access_token.expires?
+        hash.merge!('expired' => access_token.expires_at) if access_token.expires?
         hash.merge!('expires' => access_token.expires?)
         hash
       end
 
       def request_phase
-        redirect client.auth_code.authorize_url({:redirect_uri => callback_url}.merge(authorize_params))
+        redirect client.auth_code.authorize_url({:redirectUrl => callback_url, :clientId => options[:client_id]}.merge(authorize_params))
       end
 
       def authorize_params
@@ -72,10 +72,6 @@ module OmniAuth
         if request.params['error'] || request.params['error_reason']
           raise CallbackError.new(request.params['error'], request.params['error_description'] || request.params['error_reason'], request.params['error_uri'])
         end
-        if !options.provider_ignores_state && (request.params['state'].to_s.empty? || request.params['state'] != session.delete('omniauth.state'))
-          raise CallbackError.new(nil, :csrf_detected)
-        end
-
         self.access_token = build_access_token
         self.access_token = access_token.refresh! if access_token.expired?
 
@@ -101,7 +97,8 @@ module OmniAuth
 
       def build_access_token
         verifier = request.params['code']
-        client.auth_code.get_token(verifier, {:redirect_uri => callback_url}.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
+        params = {:redirectUrl => callback_url, :clientId => options[:client_id], :clientSecret => options[:client_secrete]}
+        client.auth_code.get_token(verifier, params.merge(token_params.to_hash(:symbolize_keys => true)), deep_symbolize(options.auth_token_params))
       end
 
       # An error that is indicated in the OAuth 2.0 callback.
