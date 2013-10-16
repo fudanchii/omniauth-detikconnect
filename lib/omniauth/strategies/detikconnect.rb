@@ -122,4 +122,4 @@ module OmniAuth
     end
   end
 end
-OmniAuth.config.add_camelization 'oauth2', 'OAuth2'
+OmniAuth.config.add_camelization 'detikconnect', 'DetikConnect'
