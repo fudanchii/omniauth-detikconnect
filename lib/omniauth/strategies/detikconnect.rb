@@ -2,7 +2,7 @@ require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class DetikConnect < OmniAuth::Strategies::OAuth2
+    class DetikConnect < OAuth2
 
       option :provider_ignores_state, true
       option :auth_token_params, {}
