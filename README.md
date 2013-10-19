@@ -5,7 +5,7 @@ Preliminary version.
 ## License
 
 Copyright (C) 2013 Nurahmadie.  
-Based on Omniauth-OAuth2 by Michael Bleigh and Intridea, Inc.
+Based on omniauth-oauth2 & omniauth-github by Michael Bleigh and Intridea, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
