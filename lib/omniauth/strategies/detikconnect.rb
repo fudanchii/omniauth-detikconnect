@@ -39,7 +39,7 @@ module OmniAuth
         end
       end
 
-      uid { raw_info['userId'].to_s }
+      uid { raw_info['_id'].to_s }
 
       info do
         {
