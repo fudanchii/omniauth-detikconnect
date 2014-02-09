@@ -1,5 +1,6 @@
 image: fudanchii/base
 script:
+  - ruby -v
   - gem install bundler
   - bundle install
   - rspec
