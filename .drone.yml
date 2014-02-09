@@ -1,0 +1,8 @@
+image: fudanchii/base
+script:
+  - bundle install
+  - rspec
+notify:
+  email:
+    recipients:
+      - nurahmadie@gmail.com
